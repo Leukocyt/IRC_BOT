@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="044f01f0b84d4f2282f58aa90691d371" Name="Diagram1">
+        <EntityTypeShape EntityType="internetModel.irkki" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="internetModel.lampotilaTaulu" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="internetModel.irkkiTest" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="internetModel.logs" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="internetModel.irkki_old" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="internetModel.timed_messages" Width="1.5" PointX="7.625" PointY="3.875" />
+        <EntityTypeShape EntityType="internetModel.timing_table" Width="1.5" PointX="5.375" PointY="3.875" />
+        <AssociationConnector Association="internetModel.FK_timed_messages_timing_table" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

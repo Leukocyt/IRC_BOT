@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="internetModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="irkki">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="viesti" Type="nvarchar(max)" />
+          <Property Name="nick" Type="nvarchar" MaxLength="40" />
+          <Property Name="maara" Type="bigint" />
+          <Property Name="kanava" Type="nvarchar" MaxLength="40" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="aika" Type="datetime" />
+          <Property Name="old" Type="int" />
+        </EntityType>
+        <EntityType Name="irkki_old">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="viesti" Type="nvarchar(max)" />
+          <Property Name="nick" Type="nvarchar" MaxLength="200" />
+          <Property Name="maara" Type="bigint" />
+          <Property Name="kanava" Type="nvarchar" MaxLength="1000" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="aika" Type="datetime" />
+        </EntityType>
+        <EntityType Name="irkkiTest">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="viesti" Type="nvarchar(max)" />
+          <Property Name="nick" Type="nvarchar" MaxLength="200" />
+          <Property Name="maara" Type="bigint" />
+          <Property Name="kanava" Type="nvarchar" MaxLength="1000" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="aika" Type="datetime" />
+        </EntityType>
+        <EntityType Name="lampotilaTaulu">
+          <Key>
+            <PropertyRef Name="rowId" />
+          </Key>
+          <Property Name="lampotila1" Type="float" />
+          <Property Name="lampotila2" Type="float" />
+          <Property Name="valoisuus" Type="float" />
+          <Property Name="humidity" Type="float" />
+          <Property Name="tempC" Type="float" />
+          <Property Name="aika" Type="datetime" />
+          <Property Name="id" Type="bigint" />
+          <Property Name="rowId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="logs">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="message" Type="nvarchar" MaxLength="500" />
+          <Property Name="severity" Type="int" />
+          <Property Name="timestamp" Type="datetime" />
+        </EntityType>
+        <EntityType Name="timed_messages">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="channel" Type="nvarchar" MaxLength="500" />
+          <Property Name="message" Type="nvarchar(max)" />
+          <Property Name="timing_ID" Type="bigint" />
+        </EntityType>
+        <EntityType Name="timing_table">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="valid_from" Type="datetime" />
+          <Property Name="valid_to" Type="datetime" />
+          <Property Name="trigger_time" Type="time" Precision="7" />
+        </EntityType>
+        <Association Name="FK_timed_messages_timing_table">
+          <End Role="timing_table" Type="Self.timing_table" Multiplicity="1" />
+          <End Role="timed_messages" Type="Self.timed_messages" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="timing_table">
+              <PropertyRef Name="rowid" />
+            </Principal>
+            <Dependent Role="timed_messages">
+              <PropertyRef Name="rowid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="F_Get_Stats" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="start" Type="datetime" Mode="In" />
+          <Parameter Name="kanava" Type="nvarchar" Mode="In" />
+          <Parameter Name="count_choise" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="nick" Type="nvarchar" MaxLength="500" />
+                <Property Name="count" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="F_ROWS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="start" Type="datetime" Mode="In" />
+          <Parameter Name="end" Type="datetime" Mode="In" />
+          <Parameter Name="channel" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="nick" Type="nvarchar" MaxLength="200" />
+                <Property Name="Count" Type="int" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <EntityContainer Name="internetModelStoreContainer">
+          <EntitySet Name="irkki" EntityType="Self.irkki" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="irkki_old" EntityType="Self.irkki_old" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="irkkiTest" EntityType="Self.irkkiTest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lampotilaTaulu" EntityType="Self.lampotilaTaulu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="logs" EntityType="Self.logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="timed_messages" EntityType="Self.timed_messages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="timing_table" EntityType="Self.timing_table" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_timed_messages_timing_table" Association="Self.FK_timed_messages_timing_table">
+            <End Role="timing_table" EntitySet="timing_table" />
+            <End Role="timed_messages" EntitySet="timed_messages" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="internetModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="irkki">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="viesti" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nick" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="maara" Type="Int64" />
+          <Property Name="kanava" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="aika" Type="DateTime" Precision="3" />
+          <Property Name="old" Type="Int32" />
+        </EntityType>
+        <EntityType Name="lampotilaTaulu">
+          <Key>
+            <PropertyRef Name="rowId" />
+          </Key>
+          <Property Name="lampotila1" Type="Double" />
+          <Property Name="lampotila2" Type="Double" />
+          <Property Name="valoisuus" Type="Double" />
+          <Property Name="humidity" Type="Double" />
+          <Property Name="tempC" Type="Double" />
+          <Property Name="aika" Type="DateTime" Precision="3" />
+          <Property Name="id" Type="Int64" />
+          <Property Name="rowId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityContainer Name="internetEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="irkki" EntityType="Self.irkki" />
+          <EntitySet Name="lampotilaTaulu" EntityType="Self.lampotilaTaulu" />
+          <EntitySet Name="irkkiTest" EntityType="internetModel.irkkiTest" />
+          <EntitySet Name="logs" EntityType="internetModel.logs" />
+          <EntitySet Name="irkki_old" EntityType="internetModel.irkki_old" />
+          <FunctionImport Name="F_ROWS" IsComposable="true" ReturnType="Collection(internetModel.F_ROWS_Result)">
+            <Parameter Name="start" Mode="In" Type="DateTime" />
+            <Parameter Name="end" Mode="In" Type="DateTime" />
+            <Parameter Name="channel" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="F_Get_Stats" IsComposable="true" ReturnType="Collection(internetModel.F_Get_Stats_Result)">
+            <Parameter Name="start" Mode="In" Type="DateTime" />
+            <Parameter Name="kanava" Mode="In" Type="String" />
+            <Parameter Name="count_choise" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="timed_messages" EntityType="internetModel.timed_messages" />
+          <EntitySet Name="timing_table" EntityType="internetModel.timing_table" />
+          <AssociationSet Name="FK_timed_messages_timing_table" Association="internetModel.FK_timed_messages_timing_table">
+            <End Role="timing_table" EntitySet="timing_table" />
+            <End Role="timed_messages" EntitySet="timed_messages" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="irkkiTest">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="viesti" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nick" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="maara" Type="Int64" />
+          <Property Name="kanava" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="aika" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="logs">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="severity" Type="Int32" />
+          <Property Name="timestamp" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="irkki_old">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="viesti" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="nick" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="maara" Type="Int64" />
+          <Property Name="kanava" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="aika" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="F_ROWS_Result">
+          <Property Type="String" Name="nick" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="Count" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="F_Get_Stats_Result">
+          <Property Type="String" Name="nick" Nullable="true" MaxLength="500" />
+          <Property Type="Int32" Name="count" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="timed_messages">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="channel" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="timing_ID" Type="Int64" />
+          <NavigationProperty Name="timing_table" Relationship="internetModel.FK_timed_messages_timing_table" FromRole="timed_messages" ToRole="timing_table" />
+        </EntityType>
+        <EntityType Name="timing_table">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="valid_from" Type="DateTime" Precision="3" />
+          <Property Name="valid_to" Type="DateTime" Precision="3" />
+          <Property Name="trigger_time" Type="Time" Precision="7" />
+          <NavigationProperty Name="timed_messages" Relationship="internetModel.FK_timed_messages_timing_table" FromRole="timing_table" ToRole="timed_messages" />
+        </EntityType>
+        <Association Name="FK_timed_messages_timing_table">
+          <End Type="internetModel.timing_table" Role="timing_table" Multiplicity="1" />
+          <End Type="internetModel.timed_messages" Role="timed_messages" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="timing_table">
+              <PropertyRef Name="rowid" />
+            </Principal>
+            <Dependent Role="timed_messages">
+              <PropertyRef Name="rowid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="internetModelStoreContainer" CdmEntityContainer="internetEntities">
+          <EntitySetMapping Name="irkki">
+            <EntityTypeMapping TypeName="internetModel.irkki">
+              <MappingFragment StoreEntitySet="irkki">
+                <ScalarProperty Name="old" ColumnName="old" />
+                <ScalarProperty Name="viesti" ColumnName="viesti" />
+                <ScalarProperty Name="nick" ColumnName="nick" />
+                <ScalarProperty Name="maara" ColumnName="maara" />
+                <ScalarProperty Name="kanava" ColumnName="kanava" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="aika" ColumnName="aika" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lampotilaTaulu">
+            <EntityTypeMapping TypeName="internetModel.lampotilaTaulu">
+              <MappingFragment StoreEntitySet="lampotilaTaulu">
+                <ScalarProperty Name="lampotila1" ColumnName="lampotila1" />
+                <ScalarProperty Name="lampotila2" ColumnName="lampotila2" />
+                <ScalarProperty Name="valoisuus" ColumnName="valoisuus" />
+                <ScalarProperty Name="humidity" ColumnName="humidity" />
+                <ScalarProperty Name="tempC" ColumnName="tempC" />
+                <ScalarProperty Name="aika" ColumnName="aika" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rowId" ColumnName="rowId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="irkkiTest">
+            <EntityTypeMapping TypeName="internetModel.irkkiTest">
+              <MappingFragment StoreEntitySet="irkkiTest">
+                <ScalarProperty Name="aika" ColumnName="aika" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="kanava" ColumnName="kanava" />
+                <ScalarProperty Name="maara" ColumnName="maara" />
+                <ScalarProperty Name="nick" ColumnName="nick" />
+                <ScalarProperty Name="viesti" ColumnName="viesti" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="logs">
+            <EntityTypeMapping TypeName="internetModel.logs">
+              <MappingFragment StoreEntitySet="logs">
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="rowid" ColumnName="rowid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="irkki_old">
+            <EntityTypeMapping TypeName="internetModel.irkki_old">
+              <MappingFragment StoreEntitySet="irkki_old">
+                <ScalarProperty Name="aika" ColumnName="aika" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="kanava" ColumnName="kanava" />
+                <ScalarProperty Name="maara" ColumnName="maara" />
+                <ScalarProperty Name="nick" ColumnName="nick" />
+                <ScalarProperty Name="viesti" ColumnName="viesti" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="F_ROWS" FunctionName="internetModel.Store.F_ROWS">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="internetModel.F_ROWS_Result">
+                <ScalarProperty Name="nick" ColumnName="nick" />
+                <ScalarProperty Name="Count" ColumnName="Count" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="F_Get_Stats" FunctionName="internetModel.Store.F_Get_Stats">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="internetModel.F_Get_Stats_Result">
+                <ScalarProperty Name="nick" ColumnName="nick" />
+                <ScalarProperty Name="count" ColumnName="count" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="timed_messages">
+            <EntityTypeMapping TypeName="internetModel.timed_messages">
+              <MappingFragment StoreEntitySet="timed_messages">
+                <ScalarProperty Name="timing_ID" ColumnName="timing_ID" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="channel" ColumnName="channel" />
+                <ScalarProperty Name="rowid" ColumnName="rowid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="timing_table">
+            <EntityTypeMapping TypeName="internetModel.timing_table">
+              <MappingFragment StoreEntitySet="timing_table">
+                <ScalarProperty Name="trigger_time" ColumnName="trigger_time" />
+                <ScalarProperty Name="valid_to" ColumnName="valid_to" />
+                <ScalarProperty Name="valid_from" ColumnName="valid_from" />
+                <ScalarProperty Name="rowid" ColumnName="rowid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
