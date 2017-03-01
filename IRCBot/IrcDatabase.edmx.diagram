@@ -13,6 +13,7 @@
         <EntityTypeShape EntityType="internetModel.timed_messages" Width="1.5" PointX="7.625" PointY="3.875" />
         <EntityTypeShape EntityType="internetModel.timing_table" Width="1.5" PointX="5.375" PointY="3.875" />
         <AssociationConnector Association="internetModel.FK_timed_messages_timing_table" />
+        <AssociationConnector Association="internetModel.FK_timed_messages_timing_table1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

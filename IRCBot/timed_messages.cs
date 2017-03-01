@@ -20,5 +20,6 @@ namespace IRCBot
         public Nullable<long> timing_ID { get; set; }
     
         public virtual timing_table timing_table { get; set; }
+        public virtual timing_table timing_table1 { get; set; }
     }
 }

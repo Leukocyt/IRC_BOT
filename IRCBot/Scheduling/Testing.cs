@@ -14,6 +14,7 @@ namespace IRCBot.Scheduling
         {
             //throw new NotImplementedException();
             Console.WriteLine("Hello, JOb executed");
+            Console.WriteLine("Moro sano poro, kun se kirnuun kusi.");
         }
 
     }

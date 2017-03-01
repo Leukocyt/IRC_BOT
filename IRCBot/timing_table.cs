@@ -14,11 +14,19 @@ namespace IRCBot
     
     public partial class timing_table
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public timing_table()
+        {
+            this.timed_messages1 = new HashSet<timed_messages>();
+        }
+    
         public long rowid { get; set; }
         public Nullable<System.DateTime> valid_from { get; set; }
         public Nullable<System.DateTime> valid_to { get; set; }
         public Nullable<System.TimeSpan> trigger_time { get; set; }
     
         public virtual timed_messages timed_messages { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<timed_messages> timed_messages1 { get; set; }
     }
 }

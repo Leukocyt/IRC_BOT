@@ -80,14 +80,14 @@
           <Property Name="trigger_time" Type="time" Precision="7" />
         </EntityType>
         <Association Name="FK_timed_messages_timing_table">
-          <End Role="timing_table" Type="Self.timing_table" Multiplicity="1" />
-          <End Role="timed_messages" Type="Self.timed_messages" Multiplicity="0..1" />
+          <End Role="timing_table" Type="Self.timing_table" Multiplicity="0..1" />
+          <End Role="timed_messages" Type="Self.timed_messages" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="timing_table">
               <PropertyRef Name="rowid" />
             </Principal>
             <Dependent Role="timed_messages">
-              <PropertyRef Name="rowid" />
+              <PropertyRef Name="timing_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -181,6 +181,10 @@
             <End Role="timing_table" EntitySet="timing_table" />
             <End Role="timed_messages" EntitySet="timed_messages" />
           </AssociationSet>
+          <AssociationSet Name="FK_timed_messages_timing_table1" Association="internetModel.FK_timed_messages_timing_table1">
+            <End Role="timing_table" EntitySet="timing_table" />
+            <End Role="timed_messages" EntitySet="timed_messages" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="irkkiTest">
           <Key>
@@ -230,6 +234,7 @@
           <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="timing_ID" Type="Int64" />
           <NavigationProperty Name="timing_table" Relationship="internetModel.FK_timed_messages_timing_table" FromRole="timed_messages" ToRole="timing_table" />
+          <NavigationProperty Name="timing_table1" Relationship="internetModel.FK_timed_messages_timing_table1" FromRole="timed_messages" ToRole="timing_table" />
         </EntityType>
         <EntityType Name="timing_table">
           <Key>
@@ -240,6 +245,7 @@
           <Property Name="valid_to" Type="DateTime" Precision="3" />
           <Property Name="trigger_time" Type="Time" Precision="7" />
           <NavigationProperty Name="timed_messages" Relationship="internetModel.FK_timed_messages_timing_table" FromRole="timing_table" ToRole="timed_messages" />
+          <NavigationProperty Name="timed_messages1" Relationship="internetModel.FK_timed_messages_timing_table1" FromRole="timing_table" ToRole="timed_messages" />
         </EntityType>
         <Association Name="FK_timed_messages_timing_table">
           <End Type="internetModel.timing_table" Role="timing_table" Multiplicity="1" />
@@ -250,6 +256,18 @@
             </Principal>
             <Dependent Role="timed_messages">
               <PropertyRef Name="rowid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timed_messages_timing_table1">
+          <End Type="internetModel.timing_table" Role="timing_table" Multiplicity="0..1" />
+          <End Type="internetModel.timed_messages" Role="timed_messages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timing_table">
+              <PropertyRef Name="rowid" />
+            </Principal>
+            <Dependent Role="timed_messages">
+              <PropertyRef Name="timing_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

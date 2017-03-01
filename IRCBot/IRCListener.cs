@@ -8,6 +8,7 @@ using Meebey.SmartIrc4net;
 using System.IO;
 using System.Threading;
 using Quartz;
+using IRCBot.Scheduling;
 
 namespace IRCBot
 {
@@ -20,6 +21,8 @@ namespace IRCBot
         string server;
         Random rnd1 = new Random();
         string dateformat = "dd.MM.yyyy HH:mm:ss";
+        IRCMessageScheduler scheduler = null;
+        
         public enum botCommands
         {
             unknown = -1,
@@ -60,6 +63,8 @@ namespace IRCBot
             ircClient.OnConnectionError += IrcClient_OnConnectionError;
             ircClient.OnConnected += IrcClient_OnConnected;
             ircClient.OnErrorMessage += IrcClient_OnErrorMessage;
+            //Skedulointi
+            scheduler = new IRCMessageScheduler(this);
         }
         #region tapahtumakäsittelijät
         private void IrcClient_onPrivmessage(object sender, IrcEventArgs e)
@@ -82,6 +87,7 @@ namespace IRCBot
         private void IrcClient_OnConnected(object sender, EventArgs e)
         {
             helperClass.writeLog("Botti yhdistetty!", 0);
+            scheduler.start_scheduling();
         }
 
         private void IrcClient_OnConnectionError(object sender, EventArgs e)
