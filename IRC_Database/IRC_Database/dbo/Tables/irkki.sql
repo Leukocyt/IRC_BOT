@@ -10,6 +10,8 @@
 );
 
 
+
+
 GO
 -- =============================================
 -- Author:		<Author,,Name>
@@ -31,3 +33,7 @@ BEGIN
     -- Insert statements for trigger here
 
 END
+GO
+CREATE NONCLUSTERED INDEX [Time_stamp]
+    ON [dbo].[irkki]([aika] ASC, [kanava] ASC, [nick] ASC);
+
