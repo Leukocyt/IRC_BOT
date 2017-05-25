@@ -48,7 +48,7 @@ namespace IRCBot
                 ircBot = new IRCListener(Properties.Settings.Default.nick, Properties.Settings.Default.host, Properties.Settings.Default.server);
             } else
             {
-                ircBot = new IRCListener("sarppiTestaaja", "sarppiTesti", "irc.utu.fi");
+                ircBot = new IRCListener("sarppiTestaajakka", "sarppiTestaus", "irc.elisa.fi");
             }
             List<string> channels = null;
             //Tarkistetaan kanavat, jos check_channels on tosi. TÄmä on epätosi testeissä.
