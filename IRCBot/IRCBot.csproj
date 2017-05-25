@@ -35,7 +35,7 @@
   <ItemGroup>
     <Reference Include="ChatSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\ChatSharp.dll</HintPath>
+      <HintPath>DLL\ChatSharp.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
@@ -57,7 +57,7 @@
       <HintPath>DLL\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Meebey.SmartIrc4net">
-      <HintPath>..\..\smartirc4net-1.0\smartirc4net-1.0\bin\debug\Meebey.SmartIrc4net.dll</HintPath>
+      <HintPath>DLL\Meebey.SmartIrc4net.dll</HintPath>
     </Reference>
     <Reference Include="Quartz, Version=2.5.0.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <HintPath>..\packages\Quartz.2.5.0\lib\net40\Quartz.dll</HintPath>
@@ -93,13 +93,13 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="F_Get_Stats_Result.cs">
+    <Compile Include="DB\F_Get_Stats_Result.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="F_ROWS_Result.cs">
+    <Compile Include="DB\F_ROWS_Result.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="helperClass.cs" />
+    <Compile Include="Common Functions\helperClass.cs" />
     <Compile Include="IO\IOReader.cs" />
     <Compile Include="IRCBot.cs">
       <SubType>Component</SubType>
@@ -107,35 +107,35 @@
     <Compile Include="IRCBot.Designer.cs">
       <DependentUpon>IRCBot.cs</DependentUpon>
     </Compile>
-    <Compile Include="IrcDatabase.Context.cs">
+    <Compile Include="DB\IrcDatabase.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IrcDatabase.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="IrcDatabase.cs">
+    <Compile Include="DB\IrcDatabase.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="IrcDatabase.Designer.cs">
+    <Compile Include="DB\IrcDatabase.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>IrcDatabase.edmx</DependentUpon>
     </Compile>
-    <Compile Include="IRCListener.cs" />
-    <Compile Include="irkki.cs">
+    <Compile Include="IrcBot\IRCListener.cs" />
+    <Compile Include="DB\irkki.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="irkkiTest.cs">
+    <Compile Include="DB\irkkiTest.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="irkki_old.cs">
+    <Compile Include="DB\irkki_old.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="lampotilaTaulu.cs">
+    <Compile Include="DB\lampotilaTaulu.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="logs.cs">
+    <Compile Include="DB\logs.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -154,20 +154,20 @@
     <Compile Include="Scheduling\IRCMessageScheduler.cs" />
     <Compile Include="Scheduling\Testing.cs" />
     <Compile Include="Scheduling\TriggerJobViewModel.cs" />
-    <Compile Include="timed_messages.cs">
+    <Compile Include="DB\timed_messages.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
-    <Compile Include="timing_table.cs">
+    <Compile Include="DB\timing_table.cs">
       <DependentUpon>IrcDatabase.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="IrcDatabase.edmx">
+    <EntityDeploy Include="DB\IrcDatabase.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>IrcDatabase.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="IrcDatabase.edmx.diagram">
+    <None Include="DB\IrcDatabase.edmx.diagram">
       <DependentUpon>IrcDatabase.edmx</DependentUpon>
     </None>
     <None Include="job_scheduling_data_2_0.xsd">
@@ -188,12 +188,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IrcDatabase.Context.tt">
+    <Content Include="DB\IrcDatabase.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>IrcDatabase.edmx</DependentUpon>
       <LastGenOutput>IrcDatabase.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="IrcDatabase.tt">
+    <Content Include="DB\IrcDatabase.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>IrcDatabase.edmx</DependentUpon>
       <LastGenOutput>IrcDatabase.cs</LastGenOutput>
@@ -202,9 +202,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Database access\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
