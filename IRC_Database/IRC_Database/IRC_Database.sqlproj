@@ -80,5 +80,7 @@
     <Build Include="dbo\Functions\F_ROWS.sql" />
     <Build Include="dbo\Tables\timing_table.sql" />
     <Build Include="dbo\Tables\timed_messages.sql" />
+    <Build Include="dbo\Tables\rand_messages_old.sql" />
+    <Build Include="dbo\Tables\rand_messages.sql" />
   </ItemGroup>
 </Project>
