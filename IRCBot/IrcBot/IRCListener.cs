@@ -54,11 +54,6 @@ namespace IRCBot
             ircClient.AutoReconnect = true;
             ircClient.AutoRejoinOnKick = true;
             ircClient.AutoJoinOnInvite = true;
-            //ircClient = new IrcClient(this.server, new IrcUser(this.nick, this.name));
-            //ircClient.ConnectionComplete += IrcClient_ConnectionComplete;
-            //ircClient.ChannelMessageRecieved += IrcClient_ChannelMessageRecieved;
-            //ircClient.NetworkError += IrcClient_NetworkError;
-            //ircClient.OnQueryMessage += IrcClient_OnQueryMessage;
             ircClient.OnChannelMessage += IrcClient_OnQueryMessage;
             ircClient.OnQueryMessage += IrcClient_onPrivmessage;
             ircClient.OnConnecting += IrcClient_OnConnecting;
@@ -78,7 +73,6 @@ namespace IRCBot
             {
                 helperClass.writeLog("Virhe privaattiviestin käsittelyssä! Viesti: " + ee.ToString(), 3);
             }
-            //throw new NotImplementedException();
         }
 
         private void IrcClient_OnErrorMessage(object sender, IrcEventArgs e)
@@ -99,7 +93,6 @@ namespace IRCBot
 
         private void IrcClient_OnConnecting(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
             helperClass.writeLog("Botti yrittää yhdistää", 0);
         }
         #endregion
@@ -137,8 +130,6 @@ namespace IRCBot
             try {
                 string like = "";
                 botCommands com = botCommands.unknown;
-                //com = parseCommand(e, out like);
-
                 string channel = "";
                 string messageTarget = "";            
                 if( e.Data.Channel != null ) //Kanavalla tullut viesti.
@@ -155,12 +146,9 @@ namespace IRCBot
              
                 if (com == botCommands.random)
                 {
-                    //ircClient.RfcPrivmsg(e.Data.Channel, random(e.Data.Channel, like));
-                    //ircClient.RfcPrivmsg(e.Data.Channel, random(e.Data.Channel, like));
                     ircClient.SendMessage(SendType.Message, messageTarget, random(channel, like, false, messageTarget));
                 } else if( com == botCommands.random_old)
                 {
-                    //ircClient.RfcPrivmsg(e.Data.Channel, random(e.Data.Channel, like, true));
                     ircClient.SendMessage(SendType.Message, messageTarget, random(channel, like, true, messageTarget));
                 } else if( com == botCommands.stats || com == botCommands.words || com == botCommands.chars)
                 {
@@ -189,7 +177,6 @@ namespace IRCBot
                             range = 0;
                         }
                     }
-                    //ircClient.RfcPrivmsg(e.Data.Channel, get_stats(e.Data.Channel, range));
                     ircClient.SendMessage(SendType.Message, messageTarget, get_stats(channel, range, choise));
                 }
             } catch(Exception ej)
@@ -215,8 +202,7 @@ namespace IRCBot
             like = "";
             try {
                 like = "";
-                string message = e.Data.Message;
-                //string[] splitted = message.Split(' ');
+                string message = e.Data.Message; 
                 string[] splitted = e.Data.MessageArray;
                 if (splitted.Length > 0)
                 {
@@ -254,25 +240,18 @@ namespace IRCBot
                 {
                     case "!random":
                         return botCommands.random;
-                        break;
                     case "!randomold":
                         return botCommands.random_old;
-                        break;
                     case "!stats":
                         return botCommands.stats;
-                        break;
                     case "!rivit":
                         return botCommands.stats;
-                        break;
                     case "!sanat":
                         return botCommands.words;
-                        break;
                     case "!merkit":
                         return botCommands.chars;
-                        break;
                     default:
                         return botCommands.unknown;
-                        break;
                 }
             } catch(Exception e)
             {
@@ -299,7 +278,6 @@ namespace IRCBot
 
         #region random-kyselyt
 
-        //randList = DB.irkki_old.Where(x => (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
         private irkki_old getOldRand(string channel, string like, string messageTarget = "")
         {
             try
@@ -344,7 +322,6 @@ namespace IRCBot
                     {
                         return null;
                     }
-                    //return DB.irkki.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
                 }
             } catch(Exception e)
             {
@@ -359,7 +336,6 @@ namespace IRCBot
             irkki_old oldMes = null;
             try
             {
-                //something.OrderBy(r => Guid.NewGuid()).Take(5)
                 using (var DB = new internetEntities())
                 {
                     double countOld = DB.irkki_old.Count();
@@ -371,14 +347,12 @@ namespace IRCBot
                         oldMes = getOldRand(channel, like, messageTarget);
                         if(oldMes != null)
                         {
-                            //oldMes = OldrandList[0];
                             rand = formRandomMessage(oldMes.aika.Value, oldMes.nick, oldMes.viesti);
                         } else
                         {
                             mes = getRand(channel, like, messageTarget);
                             if(mes != null)
                             {
-                                //mes = randList[0];
                                 rand = formRandomMessage(mes.aika.Value, mes.nick, mes.viesti);
                             } 
                          }                        
@@ -387,14 +361,12 @@ namespace IRCBot
                         mes = getRand(channel, like, messageTarget);
                         if (mes != null)
                         {
-                            //mes = randList[0];
                             rand = formRandomMessage(mes.aika.Value, mes.nick, mes.viesti);
                         } else
                         {
                             oldMes = getOldRand(channel, like, messageTarget);
                             if (oldMes != null)
                             {
-                                //oldMes = OldrandList[0];
                                 rand = formRandomMessage(oldMes.aika.Value, oldMes.nick, oldMes.viesti);
                             }
                         }                            
@@ -444,7 +416,6 @@ namespace IRCBot
 
         #endregion
 
-
         #region STATS
 
         private string get_stats(string channel, int ?range, int choise = 0)
@@ -452,7 +423,6 @@ namespace IRCBot
             try
             {
                 string insertNick = "";
-                //List<F_ROWS_Result> stats = new List<F_ROWS_Result>();
                 List<F_Get_Stats_Result> stats = new List<F_Get_Stats_Result>();
                 DateTime end = DateTime.Now;
 
@@ -466,7 +436,6 @@ namespace IRCBot
                 }
                 using (var db = new internetEntities())
                 {
-                    //stats = db.F_ROWS(start, end, channel).OrderByDescending(x => x.Count).Take(10).ToList();
                     stats = db.F_Get_Stats(start, channel, choise).OrderByDescending(x => x.count).Take(10).ToList();
                 }
                 string retVal = "";
@@ -516,21 +485,9 @@ namespace IRCBot
         #region Logitus ja kirjautuminen kirjaston tapahtumiin
         private void IrcClient_NetworkError(object sender, ChatSharp.Events.SocketErrorEventArgs e)
         {
-            //throw new NotImplementedException();
             helperClass.writeLog("Virhe! networkError", 1);
             this.Connect();
         }
-
-        /*
-                public string viesti { get; set; }
-                public string nick { get; set; }
-                public Nullable<long> maara { get; set; }
-                public string kanava { get; set; }
-                public long id { get; set; }
-                public Nullable<System.DateTime> aika { get; set; }
-        */
-
-
         private void stringSaveMessage(ChatSharp.Events.PrivateMessageEventArgs e)
         {
             try
@@ -591,13 +548,10 @@ namespace IRCBot
 
         public void disconnect()
         {
-            //ircClient.Quit();
             ircClient.Disconnect();
         }
         public void Connect()
         {
-            //helperClass.writeLog("Botti yhdistää servulle: " + server + ", nickillä: " + nick, 0);
-            //ircClient.ConnectAsync();
             try
             {
                 ircClient.Connect(this.server, 6667);
