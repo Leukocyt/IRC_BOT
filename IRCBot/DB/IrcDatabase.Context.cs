@@ -34,6 +34,8 @@ namespace IRCBot.DB
         public virtual DbSet<irkki_old> irkki_old { get; set; }
         public virtual DbSet<timed_messages> timed_messages { get; set; }
         public virtual DbSet<timing_table> timing_table { get; set; }
+        public virtual DbSet<rand_messages> rand_messages { get; set; }
+        public virtual DbSet<rand_messages_old> rand_messages_old { get; set; }
     
         [DbFunction("internetEntities", "F_ROWS")]
         public virtual IQueryable<F_ROWS_Result> F_ROWS(Nullable<System.DateTime> start, Nullable<System.DateTime> end, string channel)

@@ -61,6 +61,26 @@
           <Property Name="severity" Type="int" />
           <Property Name="timestamp" Type="datetime" />
         </EntityType>
+        <EntityType Name="rand_messages">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rowid_irc" Type="bigint" />
+          <Property Name="kanava" Type="nvarchar" MaxLength="500" />
+          <Property Name="message" Type="nvarchar(max)" />
+          <Property Name="initiator" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="rand_messages_old">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rowid_irc" Type="bigint" />
+          <Property Name="kanava" Type="nvarchar" MaxLength="500" />
+          <Property Name="message" Type="nvarchar(max)" />
+          <Property Name="initiator" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="timed_messages">
           <Key>
             <PropertyRef Name="rowid" />
@@ -123,6 +143,8 @@
           <EntitySet Name="irkkiTest" EntityType="Self.irkkiTest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="lampotilaTaulu" EntityType="Self.lampotilaTaulu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="logs" EntityType="Self.logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rand_messages" EntityType="Self.rand_messages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="rand_messages_old" EntityType="Self.rand_messages_old" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="timed_messages" EntityType="Self.timed_messages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="timing_table" EntityType="Self.timing_table" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_timed_messages_timing_table" Association="Self.FK_timed_messages_timing_table">
@@ -185,6 +207,8 @@
             <End Role="timing_table" EntitySet="timing_table" />
             <End Role="timed_messages" EntitySet="timed_messages" />
           </AssociationSet>
+          <EntitySet Name="rand_messages" EntityType="internetModel.rand_messages" />
+          <EntitySet Name="rand_messages_old" EntityType="internetModel.rand_messages_old" />
         </EntityContainer>
         <EntityType Name="irkkiTest">
           <Key>
@@ -271,6 +295,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="rand_messages">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rowid_irc" Type="Int64" />
+          <Property Name="kanava" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="initiator" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="rand_messages_old">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="rowid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rowid_irc" Type="Int64" />
+          <Property Name="kanava" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="initiator" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -370,6 +414,28 @@
                 <ScalarProperty Name="trigger_time" ColumnName="trigger_time" />
                 <ScalarProperty Name="valid_to" ColumnName="valid_to" />
                 <ScalarProperty Name="valid_from" ColumnName="valid_from" />
+                <ScalarProperty Name="rowid" ColumnName="rowid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rand_messages">
+            <EntityTypeMapping TypeName="internetModel.rand_messages">
+              <MappingFragment StoreEntitySet="rand_messages">
+                <ScalarProperty Name="initiator" ColumnName="initiator" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="kanava" ColumnName="kanava" />
+                <ScalarProperty Name="rowid_irc" ColumnName="rowid_irc" />
+                <ScalarProperty Name="rowid" ColumnName="rowid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rand_messages_old">
+            <EntityTypeMapping TypeName="internetModel.rand_messages_old">
+              <MappingFragment StoreEntitySet="rand_messages_old">
+                <ScalarProperty Name="initiator" ColumnName="initiator" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="kanava" ColumnName="kanava" />
+                <ScalarProperty Name="rowid_irc" ColumnName="rowid_irc" />
                 <ScalarProperty Name="rowid" ColumnName="rowid" />
               </MappingFragment>
             </EntityTypeMapping>

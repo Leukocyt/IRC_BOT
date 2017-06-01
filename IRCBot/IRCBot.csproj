@@ -87,6 +87,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DB\rand_messages.cs">
+      <DependentUpon>IrcDatabase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DB\rand_messages_old.cs">
+      <DependentUpon>IrcDatabase.tt</DependentUpon>
+    </Compile>
     <Compile Include="Testing\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

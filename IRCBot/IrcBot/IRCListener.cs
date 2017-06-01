@@ -157,11 +157,11 @@ namespace IRCBot
                 {
                     //ircClient.RfcPrivmsg(e.Data.Channel, random(e.Data.Channel, like));
                     //ircClient.RfcPrivmsg(e.Data.Channel, random(e.Data.Channel, like));
-                    ircClient.SendMessage(SendType.Message, messageTarget, random(channel, like));
+                    ircClient.SendMessage(SendType.Message, messageTarget, random(channel, like, false, messageTarget));
                 } else if( com == botCommands.random_old)
                 {
                     //ircClient.RfcPrivmsg(e.Data.Channel, random(e.Data.Channel, like, true));
-                    ircClient.SendMessage(SendType.Message, messageTarget, random(channel, like, true));
+                    ircClient.SendMessage(SendType.Message, messageTarget, random(channel, like, true, messageTarget));
                 } else if( com == botCommands.stats || com == botCommands.words || com == botCommands.chars)
                 {
                     int choise = 0;
@@ -300,41 +300,63 @@ namespace IRCBot
         #region random-kyselyt
 
         //randList = DB.irkki_old.Where(x => (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
-        private List< irkki_old> getOldRand(string channel, string like)
+        private irkki_old getOldRand(string channel, string like, string messageTarget = "")
         {
-            try {
+            try
+            {
                 using (var DB = new internetEntities())
                 {
-                    //return DB.irkki_old.Where(x => (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
-                    return DB.irkki_old.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
+                    List<string> sent_rands = DB.rand_messages.Where(x => (messageTarget == "" || x.initiator == messageTarget) && x.kanava == channel).Select(x => x.message).ToList();
+                    List<irkki_old> mList = DB.irkki_old.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower() && !sent_rands.Contains(x.viesti)).OrderBy(x => Guid.NewGuid()).ToList();
+                    irkki_old mes = null;
+                    if( mList.Any())
+                    {
+                        mes = mList.First();
+                        storeRandMessageToBuffer(null, mes, messageTarget);
+                        return mes;
+                    } else
+                    {
+                        return null;
+                    }
+                    //return DB.irkki_old.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
                 }
             } catch (Exception e)
             {
-                return new List<irkki_old>();
+                //return new List<irkki_old>();
+                return null;
             }
         }
 
-        private List<irkki> getRand(string channel, string like)
+        private irkki getRand(string channel, string like, string messageTarget = "")
         {
             try {
                 using (var DB = new internetEntities())
                 {
-                    return DB.irkki.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
+                    List<string> sent_rands = DB.rand_messages.Where(x => (messageTarget == "" || x.initiator == messageTarget) && x.kanava == channel).Select(x => x.message).ToList();
+                    List<irkki> tList = DB.irkki.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower() && !sent_rands.Contains(x.viesti)).OrderBy(x => Guid.NewGuid()).ToList();
+                    irkki mes = null;
+                    if( tList.Any())
+                    {
+                        mes = tList.First();
+                        storeRandMessageToBuffer(mes,null,messageTarget);
+                        return mes;
+                    } else
+                    {
+                        return null;
+                    }
+                    //return DB.irkki.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower()).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
                 }
             } catch(Exception e)
             {
-                return
-                    new List<irkki>();
+                return null;
             } 
         }
 
-        private string random(string channel, string like = "", bool onlyOld = false)
+        private string random(string channel, string like = "", bool onlyOld = false, string messageTarget = "")
         {
             string rand = "";
             irkki mes = null;
             irkki_old oldMes = null;
-            List<irkki_old> OldrandList = null;
-            List<irkki> randList = null;
             try
             {
                 //something.OrderBy(r => Guid.NewGuid()).Take(5)
@@ -346,33 +368,33 @@ namespace IRCBot
                     double limit = rnd1.NextDouble();
                     if( onlyOld ||  (limit < countOld / total)) //Old
                     {
-                        OldrandList = getOldRand(channel, like);
-                        if(OldrandList.Count() > 0)
+                        oldMes = getOldRand(channel, like, messageTarget);
+                        if(oldMes != null)
                         {
-                            oldMes = OldrandList[0];
+                            //oldMes = OldrandList[0];
                             rand = formRandomMessage(oldMes.aika.Value, oldMes.nick, oldMes.viesti);
                         } else
                         {
-                            randList = getRand(channel, like);
-                            if(randList.Count() > 0)
+                            mes = getRand(channel, like, messageTarget);
+                            if(mes != null)
                             {
-                                mes = randList[0];
+                                //mes = randList[0];
                                 rand = formRandomMessage(mes.aika.Value, mes.nick, mes.viesti);
                             } 
                          }                        
                     } else // new
                     {
-                        randList = getRand(channel, like);
-                        if (randList.Count() > 0)
+                        mes = getRand(channel, like, messageTarget);
+                        if (mes != null)
                         {
-                            mes = randList[0];
+                            //mes = randList[0];
                             rand = formRandomMessage(mes.aika.Value, mes.nick, mes.viesti);
                         } else
                         {
-                            OldrandList = getOldRand(channel, like);
-                            if (OldrandList.Count() > 0)
+                            oldMes = getOldRand(channel, like, messageTarget);
+                            if (oldMes != null)
                             {
-                                oldMes = OldrandList[0];
+                                //oldMes = OldrandList[0];
                                 rand = formRandomMessage(oldMes.aika.Value, oldMes.nick, oldMes.viesti);
                             }
                         }                            
@@ -389,6 +411,34 @@ namespace IRCBot
             string rand = "";
             rand = '<' + ts.ToString(dateformat) + "> " + remove_hilite(nick) + ": " + message;
             return rand;
+        }
+
+
+        private void storeRandMessageToBuffer(irkki message = null, irkki_old mesOld = null, string initiator = "")
+        {
+            try
+            {
+                using (var db = new DB.internetEntities())
+                {
+                    rand_messages rm = null;
+                    if (message != null)
+                    {
+                        rm = new rand_messages { rowid_irc = message.id, message = message.viesti, kanava = message.kanava, initiator = initiator };
+                    }
+                    else if (mesOld != null)
+                    {
+                        rm = new rand_messages { rowid_irc = mesOld.id, message = mesOld.viesti, kanava = mesOld.kanava, initiator = initiator };
+                    }
+                    if (rm != null)
+                    {
+                        db.rand_messages.Add(rm);
+                        db.SaveChanges();
+                    }
+                }
+            } catch(Exception e)
+            {
+                helperClass.writeLog("storeRandMessageToBuffer() Message: " + e.ToString(), 3);
+            }
         }
 
 
