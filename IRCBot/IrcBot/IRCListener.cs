@@ -310,9 +310,9 @@ namespace IRCBot
             try {
                 using (var DB = new internetEntities())
                 {
-                    List<long> sent_rands = DB.rand_messages.Where(x => (messageTarget == "" || x.initiator == messageTarget) && x.kanava == channel).Select(x => x.rowid_irc.Value).ToList();
+                    List<string> sent_rands = DB.rand_messages.Where(x => (messageTarget == "" || x.initiator == messageTarget) && x.kanava == channel).Select(x => x.message).ToList();
                     List<irkki> tList = null;
-                    tList = DB.irkki.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower() && (!sent_rands.Contains(x.id))).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
+                    tList = DB.irkki.Where(x => x.viesti != "x" && !x.viesti.StartsWith("!random") && (like == "" || x.viesti.Contains(like)) && x.kanava.ToLower() == channel.ToLower() && (!sent_rands.Contains(x.viesti))).OrderBy(x => Guid.NewGuid()).Take(1).ToList();
                     irkki mes = null;
                     if( tList.Any())
                     {
