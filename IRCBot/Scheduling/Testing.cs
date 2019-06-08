@@ -10,11 +10,12 @@ namespace IRCBot.Scheduling
 {
     public class Testing : IJob
     {
-        void IJob.Execute(IJobExecutionContext context)
+        Task IJob.Execute(IJobExecutionContext context)
         {
             //throw new NotImplementedException();
             Console.WriteLine("Hello, JOb executed");
             Console.WriteLine("Moro sano poro, kun se kirnuun kusi.");
+            return null;
         }
 
     }

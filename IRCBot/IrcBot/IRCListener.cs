@@ -240,6 +240,8 @@ namespace IRCBot
                 {
                     case "!random":
                         return botCommands.random;
+                    case "!satunnainen":
+                        return botCommands.random;
                     case "!randomold":
                         return botCommands.random_old;
                     case "!stats":

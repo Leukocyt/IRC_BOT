@@ -69,7 +69,7 @@ namespace IRCBot
             // construct a scheduler factory
             ISchedulerFactory schedFact = new StdSchedulerFactory();
             // get a scheduler, start the schedular before triggers or anything else
-            IScheduler sched = schedFact.GetScheduler();
+            IScheduler sched = (IScheduler) schedFact.GetScheduler();
             sched.Start();
             // create job          
             IJobDetail job = JobBuilder.Create<Testing>()

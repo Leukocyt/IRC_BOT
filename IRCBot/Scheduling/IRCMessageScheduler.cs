@@ -21,7 +21,7 @@ namespace IRCBot.Scheduling
     public class IRCMessageScheduler
     {
         IRCListener irc_bot;
-        ISchedulerFactory schedFact;
+        StdSchedulerFactory schedFact;
         IScheduler sched;
         List<TriggerJobViewModel> trigger_job_list = null;
         //Testit
@@ -35,7 +35,7 @@ namespace IRCBot.Scheduling
             // construct a scheduler factory
             schedFact = new StdSchedulerFactory();
             // get a scheduler, start the schedular before triggers or anything else
-            sched = schedFact.GetScheduler();
+            sched = schedFact.GetScheduler().Result;
             sched.Start();
             trigger_job_list = new List<TriggerJobViewModel>();
             //IRC BOTTI tänne.
@@ -208,10 +208,12 @@ namespace IRCBot.Scheduling
 
     #region ajosäikeet
     public class JobExecutor : IJob
-    {
-        void IJob.Execute(IJobExecutionContext context)
+    { 
+        Task IJob.Execute(IJobExecutionContext context)
         {
-            try {
+            try
+            {
+
                 Console.WriteLine("Start Executing");
                 long row_id = context.JobDetail.JobDataMap.GetLong("rowid");                
                 //throw new NotImplementedException();
@@ -222,11 +224,14 @@ namespace IRCBot.Scheduling
                 sendMessagesForTrigger(row_id, ref bot);
                 //bot.sendMessage("#sarppiDev", "moi!");
                 Console.WriteLine("Hello, JOb executed");
+                return null;
+                 
             } catch(Exception e)
             {
-
+                return null;
             }
         }
+
         private void sendMessagesForTrigger(Int64 timing_ID, ref IRCListener irc_bot)
         {
             using (var db = new internetEntities())
@@ -249,17 +254,18 @@ namespace IRCBot.Scheduling
 
     public class MaintExecutor : IJob
     {
-        void IJob.Execute(IJobExecutionContext context)
+        Task IJob.Execute(IJobExecutionContext context)
         {
             try
             {
                 var schedulerContext = context.Scheduler.Context;
                 IRCMessageScheduler m = (IRCMessageScheduler)schedulerContext.Get("me");
                 m.updateJobs();
+                return null;
             }
             catch (Exception e)
             {
-
+                return null;
             }
         }
 
